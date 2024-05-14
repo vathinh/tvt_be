@@ -1,0 +1,53 @@
+name: Deploy Spring Boot App to EC2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v2
+#
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v2
+#        with:
+#          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+#          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+#
+#      - name: Build and push Docker image
+#        run: |
+#          docker buildx build --platform linux/amd64 -t ${{ secrets.DOCKER_HUB_USERNAME }}/spring-boot-app:latest --push .
+
+      - name: Print test values
+        run: |
+          echo "EC2_USER: TEST_USER"
+          echo "EC2_HOST: TEST_HOST"
+          echo "EC2_KEY: TEST_KEY"
+
+      # Comment out the actual SSH and deploy steps for now
+      # - name: Install SSH Client
+      #   run: sudo apt-get install -y openssh-client
+
+      # - name: SSH to EC2 and deploy
+      #   env:
+      #     EC2_USER: ${{ secrets.EC2_USER }}
+      #     EC2_HOST: ${{ secrets.EC2_HOST }}
+      #     EC2_KEY: ${{ secrets.EC2_KEY }}
+      #   run: |
+      #     echo "${EC2_KEY}" > ec2_key.pem
+      #     chmod 400 ec2_key.pem
+      #     ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << 'EOF'
+      #       docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/spring-boot-app:latest
+      #       docker stop spring-boot-app || true
+      #       docker rm spring-boot-app || true
+      #       docker run -d --name spring-boot-app -p 8080:8080 ${{ secrets.DOCKER_HUB_USERNAME }}/spring-boot-app:latest
+      #     EOF
